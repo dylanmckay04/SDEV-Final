@@ -1,0 +1,82 @@
+import tkinter as tk
+from tkinter import messagebox
+
+# Creates main window
+root = tk.Tk()
+root.geometry("500x500")
+root.title("Pizza Portal")
+
+def submit_order():
+    # Retrieves user info from entry fields
+    name = name_entry.get()
+    address = address_entry.get()
+    size = size_var.get()
+
+  # Checks if any fields are empty
+    if not name or not address or not size:
+        messagebox.showerror("Error", "Please fill out all fields.")
+        return
+    messagebox.showinfo("Order Submitted", f"Thank you, {name}! Your {size} pizza will be delivered to {address} soon.")
+
+def clear_fields():
+    # Clears input fields
+    name_entry.delete(0, tk.END)
+    address_entry.delete(0, tk.END)
+    size_var.set("")
+
+
+def exit_program():
+    if messagebox.askyesno("Exit", "Are you sure you want to exit?"):
+        root.destroy()
+
+# Creates order window
+order_window = tk.Toplevel(root)
+order_window.geometry("500x500")
+order_window.title("Order Form")
+order_window.withdraw()
+
+# Adds images and labels
+pizza_image = tk.PhotoImage(file="pizza.png")
+tk.Label(root, image=pizza_image, width=500, height=300).grid(row=0, column=0, columnspan=5)
+
+tk.Label(root, text="Pizza Portal", font=("Helvetica", 24)).grid(row=1, column=1, columnspan=2)
+
+tk.Label(root, text="Name:").grid(row=2, column=0)
+name_entry = tk.Entry(root)
+name_entry.grid(row=2, column=1)
+
+tk.Label(root, text="Address:").grid(row=3, column=0)
+address_entry = tk.Entry(root)
+address_entry.grid(row=3, column=1)
+
+tk.Label(root, text="Size:").grid(row=4, column=0)
+size_var = tk.StringVar()
+size_options = ["Small", "Medium", "Large"]
+size_dropdown = tk.OptionMenu(root, size_var, *size_options)
+size_dropdown.grid(row=4, column=1)
+
+# Adds buttons
+submit_button = tk.Button(root, text="Submit Order", command=submit_order)
+submit_button.grid(row=5, column=0)
+
+clear_button = tk.Button(root, text="Clear Fields", command=clear_fields)
+clear_button.grid(row=5, column=1)
+
+exit_button = tk.Button(root, text="Exit", command=exit_program)
+exit_button.grid(row=6, column=0, columnspan=2)
+
+# Navigation between windows
+def open_order_window():
+    root.withdraw()
+    order_window.deiconify()
+
+def close_order_window():
+    order_window.withdraw()
+    root.deiconify()
+
+open_button = tk.Button(root, text="Order Now", command=open_order_window)
+open_button.grid(row=7, column=0, columnspan=2)
+
+back_button = tk.Button(order_window, text="Back", command=close_order_window)
+back_button.pack()
+root.mainloop()
